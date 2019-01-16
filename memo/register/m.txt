@@ -1,0 +1,31 @@
+商品販売で、販売明細と販売商品の販売登録を行う。
+
+支店情報(支店_0, 1, 2)
+スタッフ情報(スタッフ_0, 1, 2)
+
+branch_offices
+id, name, phone_number, street_address
+
+staffs
+id, branch_office_id, staff_number, name
+
+sales_details
+id, branch_office_id, staff_id, total_price, total_dis_price, total_sales_num, deposit_price, change_price, saled_at
+
+sales
+id, sales_detail_id, barcode, num, saled_at
+
+商品販売前に支店をまず選ぶ。
+商品販売時、販売明細登録を行い、
+その後、販売商品の登録を行う。
+
+販売履歴参照
+販売日時、スタッフid、合計金額
+中身↓
+販売日時
+スタッフid
+
+販売商品　販売数量
+合計金額
+お預かり金額
+お釣り

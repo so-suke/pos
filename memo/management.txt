@@ -1,0 +1,63 @@
+大カテゴリ（米飯、FF）
+小カテゴリ（おにぎり、弁当、あげもの、中華まん）
+がある。
+
+日別時間帯別販売状況
+
+最初は、日別販売状況を表示。
+時間帯と切替ができる。
+
+はじめは、大カテゴリの分を表示。
+大カテゴリ名がリンクになっており、クリックで、小カテゴリへ。
+
+todo時間帯別の日付変更、カレンダーについて調べてくる。
+
+小カテゴリ毎の日付毎の合計販売数と合計販売金額を取得。
+select id
+from small_categories
+where large_category_id = 1
+
+おにぎりの合計販売数と合計販売金額を取得。
+
+やりはじめ
+select *
+from sales as s
+join items as i on s.barcode = i.barcode
+and i.small_category_id = 1
+join small_categories as sc on i.small_category_id = sc.id
+
+大カテゴリ[米飯]に属す、小カテゴリidsの取得。
+select id
+from small_categories
+where large_category_id = 1
+
+米飯に属す小カテゴリ[おにぎり、弁当]の合計販売情報の取得
+■join句で抽出するバージョン
+select sc.id, sc.name, sum(s.num) as total_num, floor(sum(s.item_price) / 100) as total_price, DATE_FORMAT(s.saled_at, '%Y-%m-%d') AS time
+from sales as s
+join items as i on s.barcode = i.barcode
+and (
+	DATE_FORMAT(s.saled_at, '%Y-%m-%d') between '2018-11-27' and '2018-11-29'
+	or DATE_FORMAT(s.saled_at, '%Y-%m-%d') = '2019-01-13'
+)
+and i.small_category_id in (
+	select id
+	from small_categories
+	where large_category_id = 1
+)
+join small_categories as sc on i.small_category_id = sc.id
+group by DATE_FORMAT(s.saled_at, '%Y-%m-%d'), sc.id, sc.name
+
+■通常のバージョン
+select sc.id, sc.name, sum(s.num) as total_num, floor(sum(s.item_price) / 100) as total_price, DATE_FORMAT(s.saled_at, '%Y-%m-%d') AS time
+from sales as s
+join items as i on s.barcode = i.barcode
+and i.small_category_id in (
+	select id
+	from small_categories
+	where large_category_id = 1
+)
+join small_categories as sc on i.small_category_id = sc.id
+where DATE_FORMAT(s.saled_at, '%Y-%m-%d') between '2018-11-27' and '2018-11-29'
+or DATE_FORMAT(s.saled_at, '%Y-%m-%d') = '2019-01-13'
+group by DATE_FORMAT(s.saled_at, '%Y-%m-%d'), sc.id, sc.name

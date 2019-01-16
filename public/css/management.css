@@ -1,0 +1,21 @@
+.title {
+  width: 80px;
+}
+
+.smallCategoryMain-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr) repeat(8, .5fr);
+}
+
+.timezoneTable-grid {
+  display: grid;
+  grid-template-columns: 80px repeat(24, 1fr) 1.1fr;
+}
+
+.smallCategoriesBunrui {
+	font-size: 1.8rem;
+}
+
+.smallCategoriesMidasi {
+	font-size: 1rem;
+}

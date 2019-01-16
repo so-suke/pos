@@ -1,0 +1,3 @@
+simple_masters.jsonをそのまま[masters]ディレクトリのsimple_items.jsのsimple_item_mastersに代入する。
+
+simple_sales_items_allは、simple_sales.jsで読み込まれます。

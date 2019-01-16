@@ -1,0 +1,72 @@
+.isCanceled {
+	opacity: .75;
+}
+.simpleDisplay-blankItem {
+	width: 330px;
+	height: 82px;
+}
+.grid-0 {
+  display: grid;
+  grid-template-columns: 1fr 7fr 3fr 1fr 4fr;
+}
+
+.grid-cancel-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr 7fr 3fr 1fr 4fr;
+}
+
+.grid-cancel-0 {
+  display: grid;
+  grid-template-columns: 1fr 16fr;
+}
+
+.grid-cancel-1 {
+  display: grid;
+  grid-template-columns: 1fr 7fr 3fr 1fr 4fr;
+}
+
+.grid-1 {
+  display: grid;
+  grid-auto-flow: row;
+  grid-template-columns: repeat(5, 1fr);
+  grid-column-gap: 5px;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-gap: 5px;
+}
+
+.head-options {
+  display: grid;
+  grid-auto-flow: column;
+  grid-column-gap: 10px;
+}
+
+.scrollable {
+  height: 100px;
+  overflow-y: scroll;
+}
+
+.tmp-hide {
+  display: none;
+}
+
+.no-touch {
+  pointer-events: none;
+}
+
+.disabled {
+	pointer-events: none;
+}
+
+.myinput-group-text {
+	display: block;
+	width: 100px;
+}
+
+.cancelDisplay-itemsWrap {
+	height: 200px;
+}

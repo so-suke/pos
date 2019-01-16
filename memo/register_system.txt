@@ -1,0 +1,135 @@
+レジシステム
+画面構成「通常画面(normal_display)、削除モーダル(remove_display)、簡易入力モーダル(simple_display)」
+
+通常画面
+バーコードの入力欄があって、スキャンボタンがある。
+バーコード入力→スキャンで、該当バーコードの商品を販売する。
+（販売とは、商品販売配列に商品を含めること）
+乗算入力欄もある。
+初期販売数は、１個。後で、乗算ができる。
+販売とは、該当商品を販売商品配列に含めて、かつ、画面上に表示すること。
+販売数がマイナスの場合、取消行として、表示。（文字色、赤。販売数をマイナスとし、小計もマイナスになるはず。）
+
+販売商品配列とは？
+
+class SalesItem {
+  constructer() {
+    this.barcode = barcode
+    this.name = name
+    this.category_name = category_name
+    this.price = price
+    this.sales_num = sales_num
+    this.is_canceled = false
+    this.is_from_simple
+  }
+  getSubTotal() {
+    return this.price * this.sales_num
+  }
+}
+
+sales_items = [
+  new SalesItem({}),
+]
+
+販売商品クラス作成
+スキャンから、作成。
+小計計算ができる。（自動）
+
+
+小計計算
+sales_items.reduce((acc, item) => acc + item.sub_total)
+商品販売ごとに合計金額を更新する。
+
+乗算販売、初期販売時（数量1個の時）のみできる。
+配列の一番後ろの商品の販売数を掛け算する。
+
+会計できる、会計後、新たに販売を始められるよう、リセットする。
+何を？
+（簡易も）商品販売配列を空に。
+
+simple_display
+フランク、中華まんなど、タッチパネルにより、販売できる。
+簡易入力販売方法
+タッチごとに1個、販売。（乗算、数量変更が可能）
+確定とキャンセルボタンがあり、確定でタッチ販売した商品を購入商品配列に含める。
+キャンセルで、タッチ販売をロールバックする。
+
+販売数に確定分と一時的なものを持つ。
+class SimpleSalesItem {
+  constructer() {
+    this.barcode = barcode
+    this.name = name
+    this.price = price
+    this.sales_num = {
+      confirmed: 0,
+      tmp: 0,
+    }
+  }
+  getSubTotal() {
+    return this.price * this.sales_num.tmp
+  }
+}
+
+初期化時作成。
+元データもカテゴリごとに分けてある。
+if(simple_sales_items[カテゴリ名] === undefined){
+  simple_sales_items[カテゴリ名] = []
+}
+simple_sales_items[カテゴリ名].push(new SimpleSalesItem({}))
+
+simple_sales_items = {
+  hotsnack: [
+    new SimpleSalesItem({}),
+    new SimpleSalesItem({}),
+  ],
+  chukaman: [
+    new SimpleSalesItem({}),
+    new SimpleSalesItem({}),
+  ]
+}
+
+簡易入力モーダル移行時
+ //現在販売配列を保存
+this.simple.now_sales_items = simple_sales_items.カテゴリ名
+ //sales_num確定分を一時的なものに代入。
+simple.now_sales_items.forEach((item) => {
+  item.sales_num.tmp = item.sales_num.confirmed
+})
+[簡易入力合計額の計算式、通常合計＋簡易合計(reduce)]
+
+販売ボタン、タッチごとに
+販売数をカウントアップ。item.sales_num.tmp += 1
+
+数量変更ボタン
+※キャンセル方法は、また見てくる。
+
+販売数があるものだけを抽出して表示。
+一時配列(数値関連アクションのために)を用意して、一時的に退避して実現。
+simple.is_num_updating = true
+ボタンタッチでモーダルを開く。(数値変更として)
+モーダルが閉じるときに退避したものを戻す。
+閉じるイベント時に行いたい。
+
+数入力モーダル表示。確定→simple.item.sales_num = 数量変更数
+
+乗算ボタン
+数入力モーダル表示。確定→simple.item.sales_num *= 乗算数
+
+確定ボタン押下時、
+tmpとconfirmedの差を計算。例えばtmpが10でconfirmedが5の場合、差は5。これが確定分と一時的なものの差の販売数(変更販売数)となる。
+これの販売数を元に「販売商品」を作成。販売商品配列にconcatしたい。
+const simple.sales_items_confirmed = simple.sales_items.filter((item) => {
+  return item.sales_num.confirmed !== item.sales_num.tmp
+}).reduce((acc, item) => {
+  //差がマイナスの場合は、取消商品として、購入商品配列に入れる。
+  const sales_num_diff = item.sales_num.tmp - item.sales_num.confirmed
+  acc.push(new SalesItem({sales_num: sales_num_diff}))
+}, [])
+sales_items.concat(simple.sales_items_confirmed)
+その後、tmpをconfirmedに代入して、通常画面に戻る。
+
+キャンセルボタン押下時
+ただ、通常画面に戻る。
+
+simple.modalでvuejsで表示される販売数は、tmpの方。
+小計も、tmpを元に計算。(getSubTotalで自動)
