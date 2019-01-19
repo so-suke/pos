@@ -10,11 +10,16 @@
     <span class="h2">メニュー画面</span>
   </div>
 
-	<div class="d-flex justify-content-center mt-3">
-		<a href="{{ route('register') }}" class="btn btn-primary">ポスレジスター</a>
-		<a href="{{ route('sales_history_reference') }}" class="btn btn-primary ml-3">販売履歴参照</a>
-		<a href="{{ route('daily_tz_sales') }}" class="btn btn-primary ml-3">日別時間帯別販売情報</a>
-	</div>
+  <div class="d-flex justify-content-center mt-3">
+    <a href="{{ route('register') }}" class="btn btn-primary">ポスレジスター</a>
+    <a href="{{ route('sales_history_reference') }}" class="btn btn-primary ml-3">販売履歴参照</a>
+    <a href="{{ route('daily_tz_sales') }}" class="btn btn-primary ml-3">日別時間帯別販売情報</a>
+  </div>
+
+  <div class="d-flex justify-content-center" style="margin-top: 150px">
+    <a href="http://roi93cc.xsrv.jp/seikabutu_list/" class="btn btn-lg btn-danger w-25">その他の成果物</a>
+  </div>
+
 </div>
 
 @endsection
