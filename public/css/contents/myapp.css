@@ -1,17 +1,70 @@
 .clickable {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 .noclick {
-	pointer-events: none;
+  pointer-events: none;
 }
+
 .mydisabled {
-	pointer-events: none;
-	opacity: .5;
+  pointer-events: none;
+  opacity: .5;
 }
 
 ul, li {
-	margin: 0;
-	padding: 0;
-	list-style: none;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav-link {
+  position: relative;
+}
+
+.nav-item .active {
+  color: #fb6767;
+}
+
+.nav-item .active:before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0px;
+  /*下線の上下位置調整*/
+  display: inline-block;
+  width: 75%;
+  /*下線の幅*/
+  height: 3px;
+  /*下線の太さ*/
+  transform: translate(-50%);
+  /*位置調整*/
+  background-color: #fb6767;
+  /*下線の色*/
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0px;
+  height: 3px;
+  left: 50%;
+	transform: translateX(-50%);
+  bottom: 0;
+  background-color: #fb6767;
+  transition: all ease-in-out .2s;
+}
+
+.nav-link:hover {
+	color: #fb6767;
+}
+
+.nav-link:hover::after {
+  width: 75%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.nav-wrap {
+  display: flex;
+  justify-content: center;
 }

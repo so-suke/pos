@@ -18,6 +18,7 @@ class CreateItemsTable extends Migration {
       $table->integer('price');
       $table->integer('discount_amt');
       $table->integer('stock');
+      $table->string('img_name');
       $table->timestamps();
 
       $table->foreign('small_category_id')->references('id')->on('small_categories');

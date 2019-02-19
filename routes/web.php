@@ -12,10 +12,6 @@ Route::get('/register', function () {
 //アクセスすると販売データが作成されてしまうためコメントアウトしております。
 Route::get('/register/make_sales_details', 'ActionController@makeSalesDetails');
 
-Route::get('/menu', function () {
-  return view('contents.menu');
-})->name('menu');
-
 //販売履歴参照
 Route::get('/register/sales_history_reference', 'ActionController@toSalesHistoryReference')->name('sales_history_reference');
 //販売詳細(販売履歴参照から遷移してくる)

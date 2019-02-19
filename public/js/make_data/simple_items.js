@@ -9,7 +9,7 @@ var con = mysql.createConnection({
 });
 
 //小カテゴリ(揚げ物と中華まん)に属する商品のみ取得。
-const sql = `SELECT i.barcode, i.name, i.price, i.discount_amt, s.name AS small_category_name
+const sql = `SELECT i.barcode, i.name, i.price, i.discount_amt, i.img_name, s.name AS small_category_name
 FROM items AS i
 INNER JOIN small_categories AS s ON i.small_category_id = s.id
 AND s.id IN (3,4)`;

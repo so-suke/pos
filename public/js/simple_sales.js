@@ -24,10 +24,11 @@ class SimpleDiscount {
 //簡易販売画面に表示される商品を表す。主に販売数の確定分と一時的なものを区別して数えるために使用。
 class SimpleSalesItem {
   constructor({ item_master }) {
-    this.barcode = item_master.barcode
-    this.name = item_master.name
-    this.small_category_name = item_master.small_category_name
-    this.price = item_master.price
+    this.barcode = item_master.barcode;
+    this.name = item_master.name;
+    this.small_category_name = item_master.small_category_name;
+    this.price = item_master.price;
+		this.img_name = item_master.img_name;
 		this.has_sales_num = false;
     if (item_master.discount_amt > 0) {
       this.discount = new SimpleDiscount({ price: item_master.discount_amt });
@@ -90,7 +91,7 @@ const simple_sales_all_items = simple_item_masters.reduce((acc, item_master) => 
   }
   acc[item_master.small_category_name].push(new SimpleSalesItem({ item_master }))
   return acc
-}, {})
+}, {});
 
 var simpleSalesMixin = {
   data: {

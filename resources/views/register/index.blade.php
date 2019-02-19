@@ -7,99 +7,122 @@
 @endsection
 
 @section('contents')
-<div class="container-fluid pt-2" v-show="display_mode === DISPLAY_MODE.NORMAL">
-  <div class="mb-3 head-options">
-    <div class="input-group">
-      <input type="number" class="form-control form-control-sm" placeholder="barcode" ref="barcode">
-      <div class="input-group-append">
-        <button class="btn btn-sm btn-outline-primary" @click="scan" ref="scan">スキャン</button>
+<div class="container-fluid mt-4" v-show="display_mode === DISPLAY_MODE.NORMAL">
+
+  <div class="registerNormalDisplay">
+
+    <div class="mb-3 head-options">
+      <div class="input-group barcodeInputGroup head-option">
+        <input type="number" class="form-control" placeholder="バーコードを入力" ref="barcode">
+        <div class="input-group-append">
+          <button class="btn btn-outline-primary" @click="scan" ref="scan">バーコードスキャン</button>
+        </div>
+      </div>
+      <div class="input-group multiplicationInputGroup head-option">
+        <input type="number" class="form-control" ref="multi_input">
+        <div class="input-group-append">
+          <button class="btn btn-outline-primary" @click="multiplication">乗算</button>
+        </div>
+      </div>
+      <button class="btn btn-outline-danger head-option" @click="to_cancel_display">商品取消画面</button>
+      <div class="input-group kaikeiInputGroup head-option">
+        <input type="number" class="form-control" placeholder="預かり金額" ref="deposit_num">
+        <div class="input-group-append">
+          <button class="btn btn-outline-primary" @click="account">会計</button>
+        </div>
       </div>
     </div>
-    <div class="input-group">
-      <input type="number" class="form-control form-control-sm" ref="multi_input">
-      <div class="input-group-append">
-        <button class="btn btn-sm btn-outline-primary" @click="multiplication">乗算</button>
+
+    <div class="text-center saledDisplay">
+      <div class="grid-0 border-bottom">
+        <span>行</span>
+        <span>名前</span>
+        <span>単価</span>
+        <span>数量</span>
+        <span>小計</span>
+      </div>
+      <div class="scrollable border-bottom">
+        <template v-for="(item, idx) in normal.sales_items">
+          <div class="grid-0 border-bottom" v-bind:class="{ 'text-danger': item.sales_num < 0 }">
+            <span>@{{ idx + 1 }}</span>
+            <span>@{{ item.name }}</span>
+            <span>@{{ item.price }}</span>
+            <span>@{{ item.sales_num }}</span>
+            <span>@{{ item.sub_total }}</span>
+          </div>
+        </template>
       </div>
     </div>
-    <button class="btn btn-sm btn-outline-danger" @click="to_cancel_display">商品取消</button>
-    <div class="input-group">
-      <input type="number" class="form-control form-control-sm" placeholder="預かり金額" ref="deposit_num">
-      <button class="btn btn-sm btn-outline-success" @click="account">会計</button>
+
+    <div class="d-flex mt-2">
+      <div class="w-50 d-flex justify-content-center align-items-center registerAdvArea">
+        <img class="registerAdvImg" src="{{ asset('img/images.jpeg') }}" alt="">
+        <img class="registerAdvImg" src="{{ asset('img/images.jpeg') }}" alt="">
+        <img class="registerAdvImg" src="{{ asset('img/images.jpeg') }}" alt="">
+      </div>
+      <div class="w-50 p-2">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text myinput-group-text">合計</span>
+          </div>
+          <input type="text" class="form-control" :value="get_total">
+        </div>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text myinput-group-text">お預かり</span>
+          </div>
+          <input type="text" class="form-control" ref="deposit_price">
+        </div>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text myinput-group-text">お釣り</span>
+          </div>
+          <input type="text" class="form-control" ref="change_price">
+        </div>
+      </div>
     </div>
   </div>
 
-
-  <div class="text-center">
-    <div class="grid-0 border-bottom">
-      <span>行</span>
-      <span>名前</span>
-      <span>単価</span>
-      <span>数量</span>
-      <span>小計</span>
-    </div>
-    <div class="scrollable border-bottom">
-      <template v-for="(item, idx) in normal.sales_items">
-        <div class="grid-0 border-bottom" v-bind:class="{ 'text-danger': item.sales_num < 0 }">
-          <span>@{{ idx + 1 }}</span>
-          <span>@{{ item.name }}</span>
-          <span>@{{ item.price }}</span>
-          <span>@{{ item.sales_num }}</span>
-          <span>@{{ item.sub_total }}</span>
-        </div>
-      </template>
+  <div class="simpleSalesArea">
+    <div class="simpleSalesSign">★簡易販売商品はコチラから★</div>
+    <div class="simpleSalesAreaBtns">
+      <button class="btn btn-primary simpleSalesBtn" data-small_category_name="hotsnack" @click="to_simple">フランク</button>
+      <button class="btn btn-primary simpleSalesBtn" data-small_category_name="chukaman" @click="to_simple">中華まん</button>
     </div>
   </div>
 
-  <div class="d-flex mt-2">
-    <div class="w-50 border d-flex justify-content-center align-items-center">Advertisement Area</div>
-    <div class="w-50 border p-2">
-      <div class="input-group input-group-sm">
-        <div class="input-group-prepend">
-          <span class="input-group-text myinput-group-text">合計</span>
-        </div>
-        <input type="text" class="form-control" :value="get_total">
-      </div>
-      <div class="input-group input-group-sm">
-        <div class="input-group-prepend">
-          <span class="input-group-text myinput-group-text">お預かり</span>
-        </div>
-        <input type="text" class="form-control" ref="deposit_price">
-      </div>
-      <div class="input-group input-group-sm">
-        <div class="input-group-prepend">
-          <span class="input-group-text myinput-group-text">お釣り</span>
-        </div>
-        <input type="text" class="form-control" ref="change_price">
-      </div>
-    </div>
-  </div>
-
-  <div class="grid-1 text-center">
-    <button class="btn btn-sm btn-primary" data-small_category_name="hotsnack" @click="to_simple">フランク</button>
-    <button class="btn btn-sm btn-primary" data-small_category_name="chukaman" @click="to_simple">中華まん</button>
-  </div>
 </div>
-
 
 <div class="container-fluid pt-2" v-show="display_mode === DISPLAY_MODE.SIMPLE">
   <div class="d-flex justify-content-end mb-3">
-    <button class="btn btn-sm btn-primary" @click="simple_confirm">確定</button>
-    <button class="btn btn-sm btn-primary ml-2" @click="simple_cancel">キャンセル</button>
+    <button class="btn btn-primary" @click="simple_confirm">確定</button>
+    <button class="btn btn-primary ml-2" @click="simple_cancel">キャンセル</button>
   </div>
   <div class="grid-2 mb-3">
     <template v-if="simple.is_sales_updating !== true">
-      <button class="btn btn-sm btn-primary d-flex flex-column" v-for="item in simple.sales_items" @click="simple_sales(item)">
-        <span>名前: @{{ item.name }}</span>
-        <span>単価: @{{ item.price }}</span>
-        <span>数量: @{{ item.sales_num.tmp }}</span>
-        <span>小計: @{{ item.getSubTotal() }}</span>
+      <button class="btn btn-outline-primary simpleSalesItemBtn" v-for="item in simple.sales_items" @click="simple_sales(item)">
+        <div class="simpleSalesItemBtn-header">
+          <span class="simpleSalesItemBtn-itemName">@{{ item.name }}</span>
+        </div>
+        <div class="simpleSalesItemBtn-main">
+          <div class="simpleSalesItemBtn-mainLeft">
+            <div class="simpleSalesItem-imgwrap">
+              <img class="simpleSalesItem-img" :src="'img/simple_sales_items/' + item.img_name" alt="">
+            </div>
+          </div>
+          <div class="simpleSalesItemBtn-mainRight">
+            <span>単価: @{{ item.price }}</span>
+            <span>数量: @{{ item.sales_num.tmp }}</span>
+            <span>小計: @{{ item.getSubTotal() }}</span>
+          </div>
+        </div>
       </button>
     </template>
 
     <template v-else>
       <template v-for="item in simple.sales_items">
         <div v-if="item.hasSalesNumTMP() !== true" class="simpleDisplay-blankItem"></div>
-        <button v-else class="btn btn-sm btn-primary d-flex flex-column" @click="simple_sales(item)">
+        <button v-else class="btn btn-primary d-flex flex-column" @click="simple_sales(item)">
           <span>名前: @{{ item.name }}</span>
           <span>単価: @{{ item.price }}</span>
           <span>数量: @{{ item.sales_num.tmp }}</span>
@@ -109,8 +132,8 @@
     </template>
   </div>
   <div class="d-flex">
-    <button class="btn btn-sm btn-primary mr-2 disabled" @click="prepare_simple_multiplication" ref="simple_multiplication_btn">乗算</button>
-    <button class="btn btn-sm btn-primary mr-2 disabled" @click="prepare_simple_update" ref="simple_update_btn">変更</button>
+    <button class="btn btn-primary mr-2 disabled" @click="prepare_simple_multiplication" ref="simple_multiplication_btn">乗算</button>
+    <button class="btn btn-primary mr-2 disabled" @click="prepare_simple_update" ref="simple_update_btn">変更</button>
     <div class="input-group">
       <div class="input-group-prepend">
         <span class="input-group-text" id="total">合計</span>

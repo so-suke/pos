@@ -14,25 +14,24 @@
 </head>
 
 <body>
+
+	@php
+	$slash_pos = strrpos(url()->current(), '/');
+	@endphp
   <div id="app">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="btn btn-primary mr-3" href="{{ route('menu') }}">メニュー</a>
-          </li>
-          <li class="nav-item active">
-            <a class="btn btn-primary mr-3" href="{{ route('register') }}">ポスレジスタ</a>
-          </li>
-          <li class="nav-item active">
-            <a class="btn btn-primary mr-3" href="{{ route('sales_history_reference') }}">販売履歴参照</a>
-          </li>
-          <li class="nav-item active">
-            <a class="btn btn-primary mr-3" href="{{ route('daily_tz_sales') }}">日別時間帯別販売情報</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+    <div class="nav-wrap">
+      <ul class="nav">
+        <li class="nav-item">
+          <a class="nav-link {{ strpos(url()->current(), 'register', $slash_pos) !== false ? 'active':'' }}" href="{{ route('register') }}">ポスレジスタ</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{ strpos(url()->current(), 'sales_history_reference', $slash_pos) !== false ? 'active':'' }}" href="{{ route('sales_history_reference') }}">販売履歴参照</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{ strpos(url()->current(), 'daily_tz_sales', $slash_pos) !== false ? 'active':'' }}" href="{{ route('daily_tz_sales') }}">日別時間帯別販売情報</a>
+        </li>
+      </ul>
+    </div>
     @yield('contents')
   </div>
 
